@@ -37,17 +37,24 @@ resoure_fields = {
 }
 
 class Video(Resource):
-    @marshal_with(resoure_fields) # serializes it with resource_field
 
+    @marshal_with(resoure_fields) # serializes it with resource_field
     def get(self, video_id):
         result = VideoModel.query.get(id=video_id)
-        return result.json()
+        return result
 
+    @marshal_with(resoure_fields)
     def put(self, video_id):
-        abort_if_id_exists(video_id, videos)
         args = video_put_args.parse_args()
-        videos[video_id] = args
-        return videos[video_id], 201
+        video = VideoModel(
+                    id=video_id, 
+                    name=args['name'],
+                    views=args['views'],
+                    likes=args['likes']
+                )
+        db.session.add(video)
+        db.session.commit()
+        return video, 201
     
     def delete(self, video_id):
         abort_if_id_not_exist(video_id, videos)
