@@ -37,10 +37,12 @@ video_update_args.add_argument("likes", type=int, help="Likes of the video")
 
 
 resoure_fields = {
-    'id': fields.Integer,
-    'name': fields.String,
-    'views': fields.Integer,
-    'likes': fields.Integer
+    "data": {
+        'id': fields.Integer,
+        'name': fields.String,
+        'views': fields.Integer,
+        'likes': fields.Integer
+    }
 }
 
 class Video(Resource):
@@ -92,6 +94,12 @@ class Video(Resource):
         return '', 204
 
 api.add_resource(Video, "/video/<int:video_id>") #(classname, url)
+
+@app.route('/analytics/videos')
+@marshal_with(resoure_fields)
+def get_all_videos():
+    videos = VideoModel.query.all()
+    return {"data": videos}
 
 if __name__ == "__main__":
     app.run(debug=True)
