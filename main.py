@@ -87,8 +87,8 @@ class Video(Resource):
         return result
 
     def delete(self, video_id):
-        abort_if_id_not_exist(video_id, videos)
-        del videos[video_id]
+        VideoModel.query.filter_by(id=video_id).delete()
+        db.session.commit()
         return '', 204
 
 api.add_resource(Video, "/video/<int:video_id>") #(classname, url)
