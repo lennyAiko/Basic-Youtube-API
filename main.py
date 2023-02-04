@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_restful import Api, Resource, reqparse, abort
+from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -29,11 +29,19 @@ video_put_args.add_argument("name", type=str, help="Name of the video is require
 video_put_args.add_argument("views", type=str, help="Views of the video", required=True)
 video_put_args.add_argument("likes", type=str, help="Likes of the video", required=True)
 
+resoure_fields = {
+    'id': fields.Integer,
+    'name': fields.String,
+    'views': fields.Integer,
+    'likes': fields.Integer
+}
+
 class Video(Resource):
+    @marshal_with(resoure_fields) # serializes it with resource_field
 
     def get(self, video_id):
-        abort_if_id_not_exist(video_id, videos)
-        return videos[video_id]
+        result = VideoModel.query.get(id=video_id)
+        return result.json()
 
     def put(self, video_id):
         abort_if_id_exists(video_id, videos)

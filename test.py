@@ -14,10 +14,10 @@ print(response.json())
 
 
 
-def abort_if_id_not_exist(id: 'id of the object', storage: 'object location') -> 'checker':
-    if id not in storage:
-        abort(404, message="ID is not valid...")
+# def abort_if_id_not_exist(id: 'id of the object', storage: 'object location') -> 'checker':
+#     if id not in storage:
+#         abort(404, message="ID is not valid...")
 
-def abort_if_id_exists(id: 'id of the object', storage: 'object location') -> 'checker':
-    if id in storage:
-        abort(409, message="ID already exists...")
+# def abort_if_id_exists(id: 'id of the object', storage: 'object location') -> 'checker':
+#     if id in storage:
+#         abort(409, message="ID already exists...")
