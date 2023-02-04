@@ -40,7 +40,7 @@ class Video(Resource):
 
     @marshal_with(resoure_fields) # serializes it with resource_field
     def get(self, video_id):
-        result = VideoModel.query.get(id=video_id)
+        result = VideoModel.query.filter_by(id=video_id).first()
         return result
 
     @marshal_with(resoure_fields)
