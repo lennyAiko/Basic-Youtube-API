@@ -20,22 +20,14 @@ class VideoModel(db.Model):
     def __repr__(self):
         return f"Video(name = {name}, views = {views}, likes = {likes})"
 
-db.create_all()
+# can not be run twice because of overwrite
+# with app.app_context():
+#     db.create_all()
 
 video_put_args = reqparse.RequestParser()
 video_put_args.add_argument("name", type=str, help="Name of the video is required", required=True)
 video_put_args.add_argument("views", type=str, help="Views of the video", required=True)
 video_put_args.add_argument("likes", type=str, help="Likes of the video", required=True)
-
-videos = {}
-
-def abort_if_id_not_exist(id: 'id of the object', storage: 'object location') -> 'checker':
-    if id not in storage:
-        abort(404, message="ID is not valid...")
-
-def abort_if_id_exists(id: 'id of the object', storage: 'object location') -> 'checker':
-    if id in storage:
-        abort(409, message="ID already exists...")
 
 class Video(Resource):
 
