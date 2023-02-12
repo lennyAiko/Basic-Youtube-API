@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
 from flask_sqlalchemy import SQLAlchemy
-from flask_filter import query_with_filters
 
 app = Flask(__name__)
 api = Api(app)
@@ -102,13 +101,13 @@ def get_all_videos():
     videos = VideoModel.query.all()
     return videos
 
-@app.route('/videos/search/')
+@app.route('/videos/search/<query>')
 @marshal_with(resoure_fields)
-def search_videos():
+def search_videos(query):
     videos = VideoModel.query
-
     videos = videos.filter(VideoModel.name.like('%' + query + '%'))
-    videos = videos
+    videos = videos.order_by(VideoModel.name).all()
+    return videos
 
 if __name__ == "__main__":
     app.run(debug=True)
