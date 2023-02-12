@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
 from flask_sqlalchemy import SQLAlchemy
+from flask_filter import query_with_filters
 
 app = Flask(__name__)
 api = Api(app)
@@ -93,13 +94,21 @@ class Video(Resource):
         db.session.commit()
         return '', 204
 
-api.add_resource(Video, "/video/<int:video_id>") #(classname, url)
+api.add_resource(Video, "/videos/<int:video_id>") #(classname, url)
 
-@app.route('/analytics/videos')
+@app.route('/videos')
 @marshal_with(resoure_fields)
 def get_all_videos():
     videos = VideoModel.query.all()
-    return {"data": videos}
+    return videos
+
+@app.route('/videos/search/')
+@marshal_with(resoure_fields)
+def search_videos():
+    videos = VideoModel.query
+
+    videos = videos.filter(VideoModel.name.like('%' + query + '%'))
+    videos = videos
 
 if __name__ == "__main__":
     app.run(debug=True)
